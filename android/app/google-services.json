@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "442546110970",
+    "project_id": "todo-list-provider-kako",
+    "storage_bucket": "todo-list-provider-kako.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442546110970:android:4e9297832168ad1838e443",
+        "android_client_info": {
+          "package_name": "br.com.kakosergio.todo_list_provider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442546110970-funam7e1kb4leigrngdit1crvrk3lb5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACnsuIdTlqgs-Te-s8i-B_88MnAf9l_rk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442546110970-funam7e1kb4leigrngdit1crvrk3lb5d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "442546110970-9g4ee7dektnkgk7tcmk5ajhi2m7bq06e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.kakosergio"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
