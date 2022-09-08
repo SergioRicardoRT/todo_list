@@ -42,7 +42,7 @@ class RegisterPage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.width * 0.5,
             child: const FittedBox(
               fit: BoxFit.fitHeight,

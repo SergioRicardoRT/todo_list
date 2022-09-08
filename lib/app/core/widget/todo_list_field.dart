@@ -39,7 +39,7 @@ class TodoListField extends StatelessWidget {
                         },
                         icon: Icon(
                           !obscureTextValue
-                              ? TodoListIcons.eye_slash
+                              ? TodoListIcons.eyeSlash
                               : TodoListIcons.eye,
                           size: 15,
                         ))
