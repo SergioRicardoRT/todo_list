@@ -7,15 +7,19 @@ import 'package:todo_list_provider/app/modules/auth/register/register_page.dart'
 
 class AuthModule extends TodoListModule {
   AuthModule()
-      : super(bindings: [
-          ChangeNotifierProvider(
-            create: (_) => LoginController(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => RegisterController(),
-          ),
-        ], routes: {
-          '/login': (context) => const LoginPage(),
-          '/register': (context) => const RegisterPage(),
-        });
+      : super(
+          bindings: [
+            ChangeNotifierProvider(
+              create: (context) => LoginController(userService: context.read()),
+            ),
+            ChangeNotifierProvider(
+              create: (context) =>
+                  RegisterController(userService: context.read()),
+            ),
+          ],
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/register': (context) => const RegisterPage(),
+          },
+        );
 }
