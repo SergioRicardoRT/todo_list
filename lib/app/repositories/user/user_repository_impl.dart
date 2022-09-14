@@ -5,7 +5,7 @@ import 'package:todo_list_provider/app/exceptions/auth_exception.dart';
 import './user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
 
   UserRepositoryImpl({required FirebaseAuth firebaseAuth})
       : _firebaseAuth = firebaseAuth;
@@ -57,6 +57,26 @@ class UserRepositoryImpl implements UserRepository {
         throw AuthException(message: 'Login ou senha inválidos');
       }
       throw AuthException(message: e.message ?? 'Erro ao realizar o login');
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    try {
+      var loginMethods = await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+      if (loginMethods.contains('password')) {
+        await _firebaseAuth.sendPasswordResetEmail(email: email);
+      } else if (loginMethods.contains('google')) {
+        throw AuthException(
+            message:
+                'Cadastro realizado com o Google. Não pode ser resetada a senha');
+      } else {
+        throw AuthException(message: 'E-mail não cadastrado');
+      }
+    } on PlatformException catch (e, s) {
+      print(e);
+      print(s);
     }
   }
 }
