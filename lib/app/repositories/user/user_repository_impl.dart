@@ -90,11 +90,11 @@ class UserRepositoryImpl implements UserRepository {
       if (googleUser != null) {
         loginMethods =
             await _firebaseAuth.fetchSignInMethodsForEmail(googleUser.email);
-
+        print(loginMethods);
         if (loginMethods.contains('password')) {
           throw AuthException(
               message:
-                  'Você se cadastrou com este e-mail no TodoList. Caso tenha esquecido a senha, clique no link Esqueci a senha');
+                  '''Você se cadastrou com este e-mail no TodoList. Caso tenha esquecido a senha, clique no link "Esqueci a senha"''');
         } else {
           final googleAuth = await googleUser.authentication;
           final firebaseCredential = GoogleAuthProvider.credential(
@@ -117,5 +117,11 @@ class UserRepositoryImpl implements UserRepository {
         throw AuthException(message: 'Erro ao realizar login');
       }
     }
+  }
+
+  @override
+  Future<void> googleLogout() async {
+    await GoogleSignIn().signOut();
+    _firebaseAuth.signOut();
   }
 }
