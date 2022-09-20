@@ -45,6 +45,6 @@ typedef SuccessVoidCallback = void Function(
 
 typedef ErrorVoidCallback = void Function(
     DefaultChangeNotifier notifier, DefaultListenerNotifier listenerInstance);
-    
+
 typedef EverVoidCallback = void Function(
     DefaultChangeNotifier notifier, DefaultListenerNotifier listenerInstance);
