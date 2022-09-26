@@ -16,4 +16,15 @@ abstract class TodoListModule {
     return _routes.map((key, pageBuilder) => MapEntry(
         key, (_) => TodoListPage(bindings: _bindings, page: pageBuilder)));
   }
+
+  Widget getPage(String path, BuildContext context) {
+    final widgetBuilder = _routes[path];
+    if (widgetBuilder != null) {
+      return TodoListPage(
+        page: widgetBuilder,
+        bindings: _bindings,
+      );
+    }
+    throw Exception();
+  }
 }
