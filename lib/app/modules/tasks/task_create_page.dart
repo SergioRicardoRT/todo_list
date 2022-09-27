@@ -3,11 +3,14 @@ import 'package:todo_list_provider/app/core/ui/theme_extension.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
 import 'package:todo_list_provider/app/modules/tasks/task_create_controller.dart';
 import 'package:todo_list_provider/app/modules/tasks/widgets/calendar_button.dart';
+import 'package:validatorless/validatorless.dart';
 
 class TaskCreatePage extends StatelessWidget {
   final TaskCreateController _controller;
+  final _descriptionEC = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  const TaskCreatePage({Key? key, required TaskCreateController controller})
+  TaskCreatePage({Key? key, required TaskCreateController controller})
       : _controller = controller,
         super(key: key);
 
@@ -26,15 +29,15 @@ class TaskCreatePage extends StatelessWidget {
         ],
         title: const Text('Task'),
       ),
-      floatingActionButton: FloatingActionButton.extended(onPressed: () {
-        
-      },
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {},
           backgroundColor: context.primaryColor,
           label: const Text(
             'Salvar Task',
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
       body: Form(
+        key: _formKey,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
@@ -51,11 +54,15 @@ class TaskCreatePage extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              TodoListField(label: ''),
+              TodoListField(
+                label: '',
+                controller: _descriptionEC,
+                validator: Validatorless.required('Descrição é obrigatória'),
+              ),
               const SizedBox(
                 height: 20,
               ),
-              CalendarButton(), 
+              CalendarButton(),
             ],
           ),
         ),
