@@ -18,10 +18,10 @@ class DefaultChangeNotifier extends ChangeNotifier {
 
   void showLoadingAndResetState() {
     showLoading();
-    _resetState();
+    resetState();
   }
 
-  void _resetState() {
+  void resetState() {
     setError(null);
     _success = false;
   }
