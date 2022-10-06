@@ -8,10 +8,12 @@ import '../../core/notifier/default_change_notifier.dart';
 
 class HomeController extends DefaultChangeNotifier {
   final TasksService _tasksService;
-  final TaskFilterEnum filterSelected = TaskFilterEnum.today;
+  var filterSelected = TaskFilterEnum.today;
   TotalTasksModel? todayTotalTasks;
   TotalTasksModel? tomorrowTotalTasks;
   TotalTasksModel? weekTotalTasks;
+  List<TaskModel> allTasks = [];
+  List<TaskModel> filteredTasks = [];
 
   HomeController({required TasksService tasksService})
       : _tasksService = tasksService;
@@ -39,5 +41,25 @@ class HomeController extends DefaultChangeNotifier {
             weekTasks.tasks.where((task) => task.finished).length);
 
     notifyListeners();
+  }
+
+  Future<void> findTasks({required TaskFilterEnum filter}) async {
+    filterSelected = filter;
+    showLoading();
+    notifyListeners();
+    List<TaskModel> tasks;
+
+    switch (filter) {
+      case TaskFilterEnum.today:
+        tasks = await _tasksService.getToday();
+        break;
+      case TaskFilterEnum.tomorrow:
+        tasks = await _tasksService.getTomorrow();
+        break;
+      case TaskFilterEnum.week:
+        final weekModel = await _tasksService.getWeek();
+        tasks = weekModel.tasks;
+        break;
+    }
   }
 }
