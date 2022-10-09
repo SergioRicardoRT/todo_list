@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/core/notifier/default_listener_notifier.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extension.dart';
 import 'package:todo_list_provider/app/core/ui/todo_list_icons.dart';
 import 'package:todo_list_provider/app/modules/home/home_controller.dart';
@@ -8,6 +10,8 @@ import 'package:todo_list_provider/app/modules/home/widgets/home_header.dart';
 import 'package:todo_list_provider/app/modules/home/widgets/home_tasks.dart';
 import 'package:todo_list_provider/app/modules/home/widgets/home_week_filter.dart';
 import 'package:todo_list_provider/app/modules/tasks/tasks_module.dart';
+
+import '../../models/task_filter_enum.dart';
 
 class HomePage extends StatefulWidget {
   final HomeController _homeController;
@@ -23,25 +27,37 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    widget._homeController.loadTotalTasks();
+    DefaultListenerNotifier(changeNotifier: widget._homeController).listener(
+      context: context,
+      successCallback: (notifier, listenerInstance) {
+        listenerInstance.dispose();
+      },
+    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget._homeController.loadTotalTasks();
+      widget._homeController.findTasks(filter: TaskFilterEnum.today);
+    });
   }
 
-  void _goToCreateTask(BuildContext context) {
-    Navigator.of(context).push(PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 400),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        animation =
-            CurvedAnimation(parent: animation, curve: Curves.easeInQuad);
-        return ScaleTransition(
-          scale: animation,
-          alignment: Alignment.bottomRight,
-          child: child,
-        );
-      },
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return TasksModule().getPage('/task/create', context);
-      },
-    ));
+  Future<void> _goToCreateTask(BuildContext context) async {
+    await Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation =
+              CurvedAnimation(parent: animation, curve: Curves.easeInQuad);
+          return ScaleTransition(
+            scale: animation,
+            alignment: Alignment.bottomRight,
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return TasksModule().getPage('/task/create', context);
+        },
+      ),
+    );
+    widget._homeController.refreshPage();
   }
 
   @override
@@ -54,7 +70,10 @@ class _HomePageState extends State<HomePage> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => [
-              const PopupMenuItem(child: Text('Mostrar tarefas concluídas'))
+              PopupMenuItem(onTap: () => widget._homeController.showOrHideFinishedTask(),
+                child: Text(
+                    '${widget._homeController.showFinishedTask ? 'Esconder' : 'Mostrar'} tarefas concluídas'),
+              ),
             ],
             icon: const Icon(TodoListIcons.filter),
           )

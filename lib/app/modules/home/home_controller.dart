@@ -14,6 +14,9 @@ class HomeController extends DefaultChangeNotifier {
   TotalTasksModel? weekTotalTasks;
   List<TaskModel> allTasks = [];
   List<TaskModel> filteredTasks = [];
+  DateTime? initialDateOfWeek;
+  DateTime? selectedDay;
+  bool showFinishedTask = false;
 
   HomeController({required TasksService tasksService})
       : _tasksService = tasksService;
@@ -32,9 +35,11 @@ class HomeController extends DefaultChangeNotifier {
     todayTotalTasks = TotalTasksModel(
         totalTasks: todayTasks.length,
         totalTasksFinish: todayTasks.where((task) => task.finished).length);
+
     tomorrowTotalTasks = TotalTasksModel(
         totalTasks: tomorrowTasks.length,
         totalTasksFinish: tomorrowTasks.where((task) => task.finished).length);
+
     weekTotalTasks = TotalTasksModel(
         totalTasks: weekTasks.tasks.length,
         totalTasksFinish:
@@ -58,8 +63,50 @@ class HomeController extends DefaultChangeNotifier {
         break;
       case TaskFilterEnum.week:
         final weekModel = await _tasksService.getWeek();
+        initialDateOfWeek = weekModel.startDate;
         tasks = weekModel.tasks;
         break;
     }
+    filteredTasks = tasks;
+    allTasks = tasks;
+
+    if (filter == TaskFilterEnum.week && initialDateOfWeek != null) {
+      filterByDay(initialDateOfWeek!);
+    } else {
+      selectedDay = null;
+    }
+
+    if (!showFinishedTask) {
+      filteredTasks = filteredTasks.where((task) => task.finished == false).toList();
+    }
+    hideLoading();
+    notifyListeners();
+  }
+
+  void filterByDay(DateTime date) {
+    selectedDay = date;
+    filteredTasks = allTasks.where((task) => task.dateTime == date).toList();
+    notifyListeners();
+  }
+
+  Future<void> refreshPage() async {
+    await findTasks(filter: filterSelected);
+    await loadTotalTasks();
+    notifyListeners();
+  }
+
+  Future<void> checkOrUncheckTask(TaskModel task) async {
+    showLoadingAndResetState();
+    notifyListeners();
+    final taskUpdate = task.copyWith(finished: !task.finished);
+
+    await _tasksService.checkOrUncheckTask(taskUpdate);
+    hideLoading();
+    refreshPage();
+  }
+
+  void showOrHideFinishedTask() {
+    showFinishedTask = !showFinishedTask;
+    refreshPage();
   }
 }

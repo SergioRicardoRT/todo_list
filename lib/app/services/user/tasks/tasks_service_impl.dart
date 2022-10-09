@@ -36,6 +36,10 @@ class TasksServiceImpl extends TasksService {
     endFilter = startFilter.add(const Duration(days: 7));
     final tasks = await _tasksRepository.findByPeriod(startFilter, endFilter);
 
-    return WeekTaskModel(startDate: startFilter, endDate: endFilter, tasks: tasks);
+    return WeekTaskModel(
+        startDate: startFilter, endDate: endFilter, tasks: tasks);
   }
+  @override
+  Future<void> checkOrUncheckTask(TaskModel task) =>
+      _tasksRepository.checkOrUncheckTask(task);
 }

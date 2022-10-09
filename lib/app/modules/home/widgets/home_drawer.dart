@@ -77,6 +77,9 @@ class HomeDrawer extends StatelessWidget {
                             if (displayName.isEmpty) {
                               Messages.of(context)
                                   .showError('Informe um nome válido');
+                            } else if (displayName.length > 26) {
+                              Messages.of(context).showError(
+                                  'O nome não pode conter mais que 26 caracteres');
                             } else {
                               Loader.show(context);
                               await context
