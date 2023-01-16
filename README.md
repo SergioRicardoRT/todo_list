@@ -1,16 +1,13 @@
-# todo_list_provider
+# 🗒️ To-do List Manager
 
-A new Flutter project.
+Aplicativo de gerenciamento de tarefas, com login pelo Firebase Auth e banco de dados em MySQL.
 
-## Getting Started
+## 💻 Tecnologias utilizadas
 
-This project is a starting point for a Flutter application.
+- Provider como injetor de dependências;
+- ChangeNotifier e ValueNotifier como gerenciadores de estado;
+- MySQL como database;
+- Pacote sqflite como Driver de comunicação ao banco de dados SQL.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 👨‍🔬 Contributors
+- Sérgio R. R. Teixeira (@kakosergio)
